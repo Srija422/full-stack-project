@@ -1,0 +1,218 @@
+.calendar-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.calendar-filters {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.calendar-filters:hover {
+    transform: none;
+}
+
+.filter-chip {
+    padding: 6px 16px;
+    border-radius: var(--radius-full);
+    font-size: var(--font-xs);
+    font-weight: 600;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-base);
+    white-space: nowrap;
+}
+
+.filter-chip:hover {
+    background: var(--bg-glass);
+    border-color: var(--primary-300);
+}
+
+.filter-chip.filter-active {
+    background: var(--primary-500);
+    color: white;
+    border-color: var(--primary-500);
+}
+
+.calendar-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: var(--space-lg);
+}
+
+@media (max-width: 1024px) {
+    .calendar-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Calendar Main */
+.calendar-main {
+    padding: var(--space-lg);
+}
+
+.calendar-main:hover {
+    transform: none;
+}
+
+.calendar-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-lg);
+}
+
+.calendar-nav h2 {
+    font-size: var(--font-xl);
+    font-weight: 700;
+}
+
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    margin-bottom: var(--space-sm);
+}
+
+.weekday {
+    text-align: center;
+    font-size: var(--font-xs);
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: var(--space-sm) 0;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    gap: 4px;
+    position: relative;
+}
+
+.calendar-day:hover:not(.empty) {
+    background: var(--bg-glass);
+}
+
+.calendar-day.empty {
+    cursor: default;
+}
+
+.calendar-day.today .day-number {
+    background: var(--gradient-primary);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-day.selected {
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid var(--primary-300);
+}
+
+.calendar-day.has-events {
+    font-weight: 600;
+}
+
+.day-number {
+    font-size: var(--font-sm);
+    font-weight: 500;
+}
+
+.day-dots {
+    display: flex;
+    gap: 3px;
+}
+
+.day-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+}
+
+/* Calendar Sidebar */
+.calendar-sidebar {
+    padding: var(--space-lg);
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.calendar-sidebar:hover {
+    transform: none;
+}
+
+.calendar-sidebar h3 {
+    font-size: var(--font-md);
+    font-weight: 700;
+    margin-bottom: var(--space-lg);
+}
+
+.calendar-events {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.calendar-event-card {
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    background: var(--bg-glass);
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.calendar-event-card:hover {
+    transform: translateX(4px);
+    background: var(--bg-card);
+}
+
+.event-card-time {
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.calendar-event-card h4 {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    margin: 4px 0 2px;
+}
+
+.calendar-event-card p {
+    font-size: var(--font-xs);
+    color: var(--text-muted);
+}
+
+.no-events {
+    text-align: center;
+    padding: var(--space-2xl);
+    color: var(--text-muted);
+    font-size: var(--font-sm);
+}
+
+.no-events p:first-child {
+    font-size: 2rem;
+    margin-bottom: var(--space-sm);
+}

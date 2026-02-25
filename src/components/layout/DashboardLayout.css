@@ -1,0 +1,25 @@
+.dashboard-layout {
+    min-height: 100vh;
+}
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding-top: var(--topbar-height);
+    min-height: 100vh;
+    transition: margin-left var(--transition-slow);
+}
+
+.main-content>* {
+    padding: var(--space-xl);
+    max-width: 1400px;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+
+    .main-content>* {
+        padding: var(--space-md);
+    }
+}

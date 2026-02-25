@@ -1,0 +1,53 @@
+.feedback-modal {
+    max-width: 440px;
+}
+
+.feedback-activity-name {
+    color: var(--text-muted);
+    font-size: var(--font-sm);
+    margin-bottom: var(--space-lg);
+}
+
+.feedback-stars {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.feedback-star {
+    font-size: 2.5rem;
+    color: var(--neutral-300);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+}
+
+.feedback-star:hover,
+.feedback-star.active {
+    color: var(--accent-yellow);
+    transform: scale(1.2);
+}
+
+.feedback-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.feedback-success {
+    text-align: center;
+    padding: var(--space-2xl) 0;
+}
+
+.feedback-success .success-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+}
+
+.feedback-success h3 {
+    font-size: var(--font-xl);
+    margin-bottom: var(--space-sm);
+}
+
+.feedback-success p {
+    color: var(--text-muted);
+}
