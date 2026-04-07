@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
-import { mockUsers, badges as allBadges, certificates, activities } from '../data/mockData';
+import { mockUsers, badges as allBadges, certificates } from '../data/mockData';
 import {
     FiEdit2, FiUpload, FiMail, FiBook, FiCalendar, FiAward,
     FiDownload, FiChevronRight, FiHash, FiX, FiCheck, FiAlertCircle
@@ -32,6 +32,14 @@ export default function ProfilePage() {
         year: profileData.year || '',
         enrollmentId: profileData.enrollmentId || '',
     });
+
+    const [activities, setActivities] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:8080/api/activities')
+            .then(res => res.json())
+            .then(data => setActivities(data));
+    }, []);
 
     useEffect(() => {
         setEditableProfile({

@@ -142,7 +142,7 @@ export default function LoginPage() {
                                 <input
                                     type={showPassword ? 'text' : 'password'}
                                     className="form-input form-input-icon"
-                                    placeholder="Enter your password"
+                                    placeholder={role === 'admin' ? "Enter admin password (admin123)" : "Enter your password"}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
