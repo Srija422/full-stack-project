@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { activities, activityCategories } from '../../data/mockData';
+import { useState, useEffect } from 'react';
+import { activityCategories } from '../../data/mockData';
 import { useNotifications } from '../../context/NotificationContext';
 import { FiPlus, FiEdit2, FiTrash2, FiSearch, FiX } from 'react-icons/fi';
 import './ManageActivities.css';
@@ -9,6 +9,13 @@ export default function ManageActivities() {
     const [search, setSearch] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [editingActivity, setEditingActivity] = useState(null);
+    const [activities, setActivities] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:8080/api/activities')
+            .then(res => res.json())
+            .then(data => setActivities(data));
+    }, []);
 
     const filtered = activities.filter(a =>
         a.title.toLowerCase().includes(search.toLowerCase())
@@ -27,17 +34,43 @@ export default function ManageActivities() {
         setShowModal(true);
     };
 
-    const handleDelete = (activity) => {
-        addToast({ type: 'success', title: 'Activity Deleted', message: `${activity.title} has been removed.` });
+    const handleDelete = async (activity) => {
+        const res = await fetch(`http://localhost:8080/api/activities/${activity.id}`, { method: 'DELETE' });
+        if (res.ok) {
+            setActivities(prev => prev.filter(a => a.id !== activity.id));
+            addToast({ type: 'success', title: 'Activity Deleted', message: `${activity.title} has been removed.` });
+        }
     };
 
-    const handleSave = () => {
-        setShowModal(false);
-        addToast({
-            type: 'success',
-            title: editingActivity ? 'Activity Updated' : 'Activity Created',
-            message: editingActivity ? 'The activity has been updated successfully.' : 'New activity has been created.',
-        });
+    const handleSave = async (activityData) => {
+        let res;
+        if (editingActivity) {
+            res = await fetch(`http://localhost:8080/api/activities/${editingActivity.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...editingActivity, ...activityData })
+            });
+        } else {
+            res = await fetch('http://localhost:8080/api/activities', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...activityData, status: 'upcoming', organizer: 'Admin', registeredSeats: 0 })
+            });
+        }
+
+        if (res.ok) {
+            const saved = await res.json();
+            setActivities(prev => {
+                if (editingActivity) return prev.map(a => a.id === saved.id ? saved : a);
+                return [...prev, saved];
+            });
+            setShowModal(false);
+            addToast({
+                type: 'success',
+                title: editingActivity ? 'Activity Updated' : 'Activity Created',
+                message: editingActivity ? 'The activity has been updated successfully.' : 'New activity has been created.',
+            });
+        }
     };
 
     return (
@@ -127,36 +160,40 @@ export default function ManageActivities() {
                                 <FiX />
                             </button>
                         </div>
-                        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                        <form onSubmit={(e) => { 
+                            e.preventDefault(); 
+                            const formData = new FormData(e.target);
+                            handleSave(Object.fromEntries(formData.entries())); 
+                        }} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                             <div className="form-group">
                                 <label className="form-label">Title</label>
-                                <input className="form-input" defaultValue={editingActivity?.title || ''} placeholder="Activity title" />
+                                <input name="title" className="form-input" defaultValue={editingActivity?.title || ''} placeholder="Activity title" required />
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                 <div className="form-group">
                                     <label className="form-label">Category</label>
-                                    <select className="form-input" defaultValue={editingActivity?.category || ''}>
+                                    <select name="category" className="form-input" defaultValue={editingActivity?.category || ''}>
                                         {activityCategories.map(c => <option key={c.id} value={c.id}>{c.label}</option>)}
                                     </select>
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label">Date</label>
-                                    <input className="form-input" type="date" defaultValue={editingActivity?.date || ''} />
+                                    <input name="date" className="form-input" type="date" defaultValue={editingActivity?.date || ''} required />
                                 </div>
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                 <div className="form-group">
                                     <label className="form-label">Venue</label>
-                                    <input className="form-input" defaultValue={editingActivity?.venue || ''} placeholder="Venue" />
+                                    <input name="venue" className="form-input" defaultValue={editingActivity?.venue || ''} placeholder="Venue" required />
                                 </div>
                                 <div className="form-group">
                                     <label className="form-label">Total Seats</label>
-                                    <input className="form-input" type="number" defaultValue={editingActivity?.totalSeats || ''} />
+                                    <input name="totalSeats" className="form-input" type="number" defaultValue={editingActivity?.totalSeats || ''} required />
                                 </div>
                             </div>
                             <div className="form-group">
                                 <label className="form-label">Description</label>
-                                <textarea className="form-input" rows={3} defaultValue={editingActivity?.description || ''} placeholder="Activity description" />
+                                <textarea name="description" className="form-input" rows={3} defaultValue={editingActivity?.description || ''} placeholder="Activity description" />
                             </div>
                             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>
