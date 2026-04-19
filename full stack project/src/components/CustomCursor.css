@@ -1,0 +1,101 @@
+.custom-cursor-wrapper {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 99999;
+    overflow: hidden;
+}
+
+/* Inner dot */
+.cursor-dot {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%);
+    z-index: 99999;
+    mix-blend-mode: difference;
+    transition: width 0.3s ease, height 0.3s ease, background 0.3s ease;
+}
+
+.cursor-dot--hover {
+    width: 0px;
+    height: 0px;
+}
+
+.cursor-dot--click {
+    width: 6px;
+    height: 6px;
+    background: var(--primary-300);
+}
+
+/* Outer ring */
+.cursor-ring {
+    position: fixed;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(99, 102, 241, 0.5);
+    transform: translate(-50%, -50%);
+    z-index: 99998;
+    transition: width 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+        height 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+        border-color 0.3s ease,
+        background 0.3s ease;
+}
+
+.cursor-ring--hover {
+    width: 56px;
+    height: 56px;
+    border-color: rgba(99, 102, 241, 0.8);
+    background: rgba(99, 102, 241, 0.08);
+    border-width: 2px;
+}
+
+.cursor-ring--click {
+    width: 28px;
+    height: 28px;
+    border-color: var(--primary-400);
+    background: rgba(99, 102, 241, 0.15);
+}
+
+/* Ambient glow */
+.cursor-glow {
+    position: fixed;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    z-index: 99990;
+    filter: blur(2px);
+}
+
+/* Trail particles */
+.cursor-trail {
+    position: fixed;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: hsla(var(--trail-hue, 240), 80%, 65%, 0.6);
+    transform: translate(-50%, -50%);
+    z-index: 99997;
+    pointer-events: none;
+    box-shadow: 0 0 8px hsla(var(--trail-hue, 240), 80%, 65%, 0.4);
+}
+
+/* Hide default cursor globally */
+@media (hover: hover) and (pointer: fine) {
+    * {
+        cursor: none !important;
+    }
+}
+
+/* Disable on touch / mobile */
+@media (hover: none),
+(pointer: coarse) {
+    .custom-cursor-wrapper {
+        display: none;
+    }
+}
